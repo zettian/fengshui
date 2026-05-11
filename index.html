@@ -619,21 +619,63 @@
     border-left-color: #008080;
 }
 .cultural-disclaimer .disclaimer-title { color: #008080; }
+
+/* 语言切换 */
+.lang-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    background: rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(212,168,83,0.4);
+    font-size: 12px;
+}
+.lang-switch-btn {
+    padding: 4px 10px;
+    cursor: pointer;
+    color: var(--gold-light);
+    background: transparent;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+    line-height: 1.2;
+}
+.lang-switch-btn.active {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: var(--bg-dark);
+}
+.lang-switch-btn:hover:not(.active) {
+    background: rgba(255,255,255,0.1);
+}
+.header-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
 </style>
 </head>
 <body>
     <div class="container">
         <!-- 头部 -->
         <div class="header">
-            <h1 class="title">择天风水</h1>
+            <div class="header-top-row">
+                <h1 class="title" data-i18n="title">择天风水</h1>
+                <div class="lang-switch">
+                    <button class="lang-switch-btn active" id="langZh" onclick="setLanguage('zh')">中文</button>
+                    <button class="lang-switch-btn" id="langEn" onclick="setLanguage('en')">EN</button>
+                </div>
+            </div>
             <div class="location" id="location">
                 <svg class="location-icon" viewBox="0 0 24 24">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                 </svg>
-                <span id="locationText">定位中...</span>
+                <span id="locationText" data-i18n="locating">定位中...</span>
             </div>
-            <div class="date-info">
-                <span id="currentYear">2025</span>年 <span id="currentMonth">1</span>月 · <span id="yunInfo">上元</span>
+            <div class="date-info" id="dateInfo">
+                <span id="currentYear">2025</span><span data-i18n="yearUnit">年</span> <span id="currentMonth">1</span><span data-i18n="monthUnit">月</span> · <span id="yunInfo">上元</span>
             </div>
         </div>
 
@@ -644,10 +686,10 @@
     <!-- 指南针区域 - 底部控制栏 -->
     <div class="compass-section">
         <div class="mode-buttons">
-            <button class="mode-btn active" data-mode="year">年飞星</button>
-            <button class="mode-btn" data-mode="month">月飞星</button>
-            <button class="mode-btn" data-mode="combined">组合</button>
-            <button class="mode-btn" id="detailBtn">详情</button>
+            <button class="mode-btn active" data-mode="year" data-i18n="yearStar">年飞星</button>
+            <button class="mode-btn" data-mode="month" data-i18n="monthStar">月飞星</button>
+            <button class="mode-btn" data-mode="combined" data-i18n="combined">组合</button>
+            <button class="mode-btn" id="detailBtn" data-i18n="detail">详情</button>
         </div>
     </div>
 
@@ -675,28 +717,28 @@
             </div>
             <div class="modal-info-grid">
                 <div class="modal-info-item">
-                    <div class="modal-info-label">天干地支</div>
+                    <div class="modal-info-label" data-i18n="tianganDizhi">天干地支</div>
                     <div class="modal-info-value" id="modalTiangan">亥乾戌</div>
                 </div>
                 <div class="modal-info-item">
-                    <div class="modal-info-label">五行</div>
+                    <div class="modal-info-label" data-i18n="wuxing">五行</div>
                     <div class="modal-info-value" id="modalWuxing">金</div>
                 </div>
                 <div class="modal-info-item">
-                    <div class="modal-info-label">代表人物</div>
+                    <div class="modal-info-label" data-i18n="representPerson">代表人物</div>
                     <div class="modal-info-value" id="modalPerson">父</div>
                 </div>
                 <div class="modal-info-item">
-                    <div class="modal-info-label">对应身体</div>
+                    <div class="modal-info-label" data-i18n="correspondBody">对应身体</div>
                     <div class="modal-info-value" id="modalBody">头</div>
                 </div>
             </div>
-            <button class="modal-close" id="modalClose">关闭</button>
+            <button class="modal-close" id="modalClose" data-i18n="close">关闭</button>
         </div>
     </div>
 
     <!-- 权限按钮 -->
-    <button class="permission-btn" id="permissionBtn">开启指南针</button>
+    <button class="permission-btn" id="permissionBtn" data-i18n="enableCompass">开启指南针</button>
 
     <!-- 校准提示 -->
     <div class="calibration-hint" id="calibrationHint">
@@ -707,8 +749,8 @@
                 <circle cx="50" cy="50" r="8" fill="#d4a853"/>
             </svg>
         </div>
-        <div class="calibration-text">请将手机画"8"字校准</div>
-        <div class="calibration-sub">对准后指南针将自动工作</div>
+        <div class="calibration-text" data-i18n="calibrationTitle">请将手机画"8"字校准</div>
+        <div class="calibration-sub" data-i18n="calibrationSub">对准后指南针将自动工作</div>
     </div>
 
     <script>
@@ -731,6 +773,382 @@
                 }
             });
         })();
+
+        // ===== i18n 国际化 =====
+        const i18n = {
+            zh: {
+                title: '择天风水',
+                locating: '定位中...',
+                yearUnit: '年',
+                monthUnit: '月',
+                yearStar: '年飞星',
+                monthStar: '月飞星',
+                combined: '组合',
+                detail: '详情',
+                close: '关闭',
+                enableCompass: '开启指南针',
+                calibrationTitle: '请将手机画"8"字校准',
+                calibrationSub: '对准后指南针将自动工作',
+                tianganDizhi: '天干地支',
+                wuxing: '五行',
+                representPerson: '代表人物',
+                correspondBody: '对应身体',
+                openSourceEdition: '⚡ 开源版 | Open Source Edition',
+                openSourceDesc: '本产品以 BSL 1.1 许可证开源发布，非商业用途免费使用<br>Released under BSL 1.1 License, free for non-commercial use',
+                fullVersionLink: '✨ 完整版 → 官网',
+                wechatMiniProgram: '📱 微信小程序搜「易学轻松玩」',
+                engineByMaster: '开源引擎由择天老师开发 | Engine by Master Zeyue',
+                culturalDisclaimerTitle: '📜 文化声明 | Cultural Disclaimer',
+                culturalDisclaimerZh: '本产品基于中华传统易学文化体系，以图解与解读的形式呈现古代智慧，仅供文化学习与个人参考之用，不构成任何预测、决策或专业建议。用户应理性看待，自行判断。',
+                culturalDisclaimerEn: 'This product is based on traditional Chinese I Ching cultural systems, presenting ancient wisdom through visual interpretation and cultural analysis. For educational and cultural purposes only. It does not constitute any prediction, professional advice, or decision-making guidance.',
+                // 动态内容
+                compassWait: '等待启动',
+                compassNeedAuth: '需授权',
+                compassTapStart: '点击启动',
+                compassUnsupported: '设备不支持',
+                compassStarting: '启动中...',
+                compassNormal: '正常',
+                compassNoData: '无方向数据',
+                compassDenied: '权限被拒绝',
+                compassRetry: '权限被拒，点击重试',
+                compassFailed: '请求失败',
+                compassRetryTap: '点击重试',
+                compassUnavailable: '⚠️ 指南针不可用',
+                compassOpenMobile: '请在手机浏览器中打开',
+                geoUnsupported: '浏览器不支持定位',
+                geoFailed: '定位失败',
+                geoDenied: '定位权限被拒绝',
+                geoUnavailable: '位置信息不可用',
+                geoTimeout: '定位超时',
+                geoRetry: '重试',
+                // 九宫/飞星
+                luckGood: '吉',
+                luckBad: '凶',
+                luckGreat: '大吉',
+                luckDanger: '大凶',
+                // 宫位名
+                palaceQian: '乾',
+                palaceKan: '坎',
+                palaceGen: '艮',
+                palaceDui: '兑',
+                palaceZhong: '中',
+                palaceZhen: '震',
+                palaceKun: '坤',
+                palaceLi: '离',
+                palaceXun: '巽',
+                // 方位
+                dirNW: '西北',
+                dirN: '北',
+                dirNE: '东北',
+                dirW: '西',
+                dirCenter: '中',
+                dirE: '东',
+                dirSW: '西南',
+                dirS: '南',
+                dirSE: '东南',
+                // 五行
+                wxMetal: '金',
+                wxWater: '水',
+                wxEarth: '土',
+                wxWood: '木',
+                wxFire: '火',
+                // 人物
+                personFather: '父',
+                personMiddleSon: '中男',
+                personYoungestSon: '少男',
+                personYoungestDaughter: '少女',
+                personEldestSon: '长男',
+                personMother: '母',
+                personMiddleDaughter: '中女',
+                personEldestDaughter: '长女',
+                // 身体
+                bodyHead: '头',
+                bodyEar: '耳',
+                bodyHandsFeet: '手脚',
+                bodyMouth: '口',
+                bodyFeet: '足',
+                bodyAbdomen: '腹',
+                bodyEyes: '目',
+                bodyThigh: '股',
+                // 飞星名
+                star1: '一白',
+                star2: '二黑',
+                star3: '三碧',
+                star4: '四绿',
+                star5: '五黄',
+                star6: '六白',
+                star7: '七赤',
+                star8: '八白',
+                star9: '九紫',
+                // 飞星描述
+                star1Desc: '贪狼星，主桃花、人缘、智慧',
+                star2Desc: '巨门星，主病符、灾祸',
+                star3Desc: '禄存星，主是非、官非',
+                star4Desc: '文曲星，主文昌、学业',
+                star5Desc: '廉贞星，主灾祸、疾病，宜静不宜动',
+                star6Desc: '武曲星，主偏财、贵人',
+                star7Desc: '破军星，主破财、盗贼',
+                star8Desc: '左辅星，主正财、置业',
+                star9Desc: '右弼星，主喜庆、姻缘',
+                // 元运
+                yun9: '九紫火运',
+                yun8: '八白土运',
+                yun7: '七赤金运',
+                yun6: '六白金运',
+                // 年飞星/月飞星弹窗标题
+                yearFlyingStar: '年飞星',
+                monthFlyingStar: '月飞星'
+            },
+            en: {
+                title: 'Zeyue Feng Shui',
+                locating: 'Locating...',
+                yearUnit: '',
+                monthUnit: '',
+                yearStar: 'Year Star',
+                monthStar: 'Month Star',
+                combined: 'Combined',
+                detail: 'Detail',
+                close: 'Close',
+                enableCompass: 'Enable Compass',
+                calibrationTitle: 'Calibrate by drawing a figure-8',
+                calibrationSub: 'Compass will work automatically once calibrated',
+                tianganDizhi: 'Stem-Branch',
+                wuxing: 'Element',
+                representPerson: 'Represents',
+                correspondBody: 'Body Part',
+                openSourceEdition: '⚡ Open Source Edition',
+                openSourceDesc: 'Released under BSL 1.1 License, free for non-commercial use',
+                fullVersionLink: '✨ Full Version → Website',
+                wechatMiniProgram: '📱 Search "易学轻松玩" on WeChat Mini Program',
+                engineByMaster: 'Open-source engine by Master Zeyue',
+                culturalDisclaimerTitle: '📜 Cultural Disclaimer',
+                culturalDisclaimerZh: 'This product is based on traditional Chinese I Ching cultural systems, presenting ancient wisdom through visual interpretation and cultural analysis. For educational and cultural purposes only. It does not constitute any prediction, professional advice, or decision-making guidance.',
+                culturalDisclaimerEn: 'This product is based on traditional Chinese I Ching cultural systems, presenting ancient wisdom through visual interpretation and cultural analysis. For educational and cultural purposes only. It does not constitute any prediction, professional advice, or decision-making guidance.',
+                // 动态内容
+                compassWait: 'Standby',
+                compassNeedAuth: 'Auth Required',
+                compassTapStart: 'Tap to Start',
+                compassUnsupported: 'Not Supported',
+                compassStarting: 'Starting...',
+                compassNormal: 'Active',
+                compassNoData: 'No Data',
+                compassDenied: 'Permission Denied',
+                compassRetry: 'Denied — Tap to Retry',
+                compassFailed: 'Request Failed',
+                compassRetryTap: 'Tap to Retry',
+                compassUnavailable: '⚠️ Compass Unavailable',
+                compassOpenMobile: 'Please open in a mobile browser',
+                geoUnsupported: 'Geolocation not supported',
+                geoFailed: 'Location Failed',
+                geoDenied: 'Location permission denied',
+                geoUnavailable: 'Position unavailable',
+                geoTimeout: 'Location timeout',
+                geoRetry: 'Retry',
+                // 九宫/飞星
+                luckGood: 'Auspicious',
+                luckBad: 'Inauspicious',
+                luckGreat: 'Very Auspicious',
+                luckDanger: 'Very Inauspicious',
+                // 宫位名
+                palaceQian: 'Qian',
+                palaceKan: 'Kan',
+                palaceGen: 'Gen',
+                palaceDui: 'Dui',
+                palaceZhong: 'Center',
+                palaceZhen: 'Zhen',
+                palaceKun: 'Kun',
+                palaceLi: 'Li',
+                palaceXun: 'Xun',
+                // 方位
+                dirNW: 'NW',
+                dirN: 'N',
+                dirNE: 'NE',
+                dirW: 'W',
+                dirCenter: 'Center',
+                dirE: 'E',
+                dirSW: 'SW',
+                dirS: 'S',
+                dirSE: 'SE',
+                // 五行
+                wxMetal: 'Metal',
+                wxWater: 'Water',
+                wxEarth: 'Earth',
+                wxWood: 'Wood',
+                wxFire: 'Fire',
+                // 人物
+                personFather: 'Father',
+                personMiddleSon: 'Middle Son',
+                personYoungestSon: 'Youngest Son',
+                personYoungestDaughter: 'Youngest Daughter',
+                personEldestSon: 'Eldest Son',
+                personMother: 'Mother',
+                personMiddleDaughter: 'Middle Daughter',
+                personEldestDaughter: 'Eldest Daughter',
+                // 身体
+                bodyHead: 'Head',
+                bodyEar: 'Ear',
+                bodyHandsFeet: 'Hands & Feet',
+                bodyMouth: 'Mouth',
+                bodyFeet: 'Feet',
+                bodyAbdomen: 'Abdomen',
+                bodyEyes: 'Eyes',
+                bodyThigh: 'Thigh',
+                // 飞星名
+                star1: '1 White',
+                star2: '2 Black',
+                star3: '3 Jade',
+                star4: '4 Green',
+                star5: '5 Yellow',
+                star6: '6 White',
+                star7: '7 Red',
+                star8: '8 White',
+                star9: '9 Purple',
+                // 飞星描述
+                star1Desc: 'Tan Lang Star — Romance, social connections, wisdom',
+                star2Desc: 'Ju Men Star — Illness, misfortune',
+                star3Desc: 'Lu Cun Star — Disputes, legal conflicts',
+                star4Desc: 'Wen Qu Star — Academic success, creativity',
+                star5Desc: 'Lian Zhen Star — Disaster, illness. Best to keep still',
+                star6Desc: 'Wu Qu Star — Windfall wealth, benefactors',
+                star7Desc: 'Po Jun Star — Financial loss, theft',
+                star8Desc: 'Zuo Fu Star — Primary wealth, property',
+                star9Desc: 'You Bi Star — Celebrations, marriage',
+                // 元运
+                yun9: 'Period 9 · Fire',
+                yun8: 'Period 8 · Earth',
+                yun7: 'Period 7 · Metal',
+                yun6: 'Period 6 · Metal',
+                // 年飞星/月飞星弹窗标题
+                yearFlyingStar: 'Year Flying Star',
+                monthFlyingStar: 'Month Flying Star'
+            }
+        };
+
+        let currentLang = localStorage.getItem('zettian-lang') || 'zh';
+        let isEn = currentLang === 'en';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            isEn = lang === 'en';
+            localStorage.setItem('zettian-lang', lang);
+            applyLanguage();
+        }
+
+        function toggleLanguage() {
+            setLanguage(currentLang === 'zh' ? 'en' : 'zh');
+        }
+
+        function applyLanguage() {
+            document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
+            document.title = currentLang === 'zh' ? '择天风水 - 开源版 | ZeyueFengshui Open Source' : 'Zeyue Feng Shui - Open Source | Flying Star Compass';
+
+            // Update lang switch buttons
+            document.getElementById('langZh').classList.toggle('active', currentLang === 'zh');
+            document.getElementById('langEn').classList.toggle('active', currentLang === 'en');
+
+            // Update all data-i18n elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang] && i18n[currentLang][key]) {
+                    el.innerHTML = i18n[currentLang][key];
+                }
+            });
+
+            // Re-render dynamic content
+            renderNinePalace();
+
+            // Restore compass state after re-render
+            if (compassActive && currentAlpha > 0) {
+                updateCompassDisplay(currentAlpha);
+                highlightPalace(currentAlpha);
+                updateCompassStatus(t('compassNormal'), true);
+            }
+
+            // Update yun info display
+            updateYunDisplay();
+        }
+
+        // Helper: get i18n text
+        function t(key) {
+            return (i18n[currentLang] && i18n[currentLang][key]) || key;
+        }
+
+        // Helper: translate palace name
+        function tPalaceName(id) {
+            const map = {
+                'qian': 'palaceQian', 'kan': 'palaceKan', 'gen': 'palaceGen',
+                'dui': 'palaceDui', 'zhong': 'palaceZhong', 'zhen': 'palaceZhen',
+                'kun': 'palaceKun', 'li': 'palaceLi', 'xun': 'palaceXun'
+            };
+            return t(map[id] || id);
+        }
+
+        // Helper: translate direction
+        function tDirection(dir) {
+            const map = {
+                '西北': 'dirNW', '北': 'dirN', '东北': 'dirNE',
+                '西': 'dirW', '中': 'dirCenter', '东': 'dirE',
+                '西南': 'dirSW', '南': 'dirS', '东南': 'dirSE'
+            };
+            return t(map[dir] || dir);
+        }
+
+        // Helper: translate wuxing
+        function tWuxing(wx) {
+            const map = {
+                '金': 'wxMetal', '水': 'wxWater', '土': 'wxEarth',
+                '木': 'wxWood', '火': 'wxFire'
+            };
+            return t(map[wx] || wx);
+        }
+
+        // Helper: translate person
+        function tPerson(person) {
+            const map = {
+                '父': 'personFather', '中男': 'personMiddleSon',
+                '少男': 'personYoungestSon', '少女': 'personYoungestDaughter',
+                '长男': 'personEldestSon', '母': 'personMother',
+                '中女': 'personMiddleDaughter', '长女': 'personEldestDaughter'
+            };
+            return t(map[person] || person);
+        }
+
+        // Helper: translate body
+        function tBody(body) {
+            const map = {
+                '头': 'bodyHead', '耳': 'bodyEar', '手脚': 'bodyHandsFeet',
+                '口': 'bodyMouth', '足': 'bodyFeet', '腹': 'bodyAbdomen',
+                '目': 'bodyEyes', '股': 'bodyThigh'
+            };
+            return t(map[body] || body);
+        }
+
+        // Helper: translate star name
+        function tStarName(num) {
+            return t('star' + num);
+        }
+
+        // Helper: translate star desc
+        function tStarDesc(num) {
+            return t('star' + num + 'Desc');
+        }
+
+        // Helper: translate luck
+        function tLuck(luck) {
+            const map = {
+                '吉': 'luckGood', '凶': 'luckBad',
+                '大吉': 'luckGreat', '大凶': 'luckDanger'
+            };
+            return t(map[luck] || luck);
+        }
+
+        // Helper: translate yun info
+        function tYunInfo(year) {
+            if (year >= 2024) return t('yun9');
+            if (year >= 2017) return t('yun8');
+            if (year >= 2004) return t('yun7');
+            return t('yun6');
+        }
 
         // ===== 数据定义 =====
         const PALACE_DATA = [
@@ -767,17 +1185,25 @@
         let yearFlyingStars = [];
         let monthFlyingStars = [];
 
+        // ===== 更新元运信息 =====
+        function updateYunDisplay() {
+            const now = new Date();
+            document.getElementById('yunInfo').textContent = isEn ? tYunInfo(now.getFullYear()) : getYunInfo(now.getFullYear());
+        }
+
         // ===== 初始化 =====
         function init() {
             const now = new Date();
             document.getElementById('currentYear').textContent = now.getFullYear();
             document.getElementById('currentMonth').textContent = now.getMonth() + 1;
-            document.getElementById('yunInfo').textContent = getYunInfo(now.getFullYear());
+            document.getElementById('yunInfo').textContent = isEn ? tYunInfo(now.getFullYear()) : getYunInfo(now.getFullYear());
 
             yearFlyingStars = getYearFlyingStars(now.getFullYear());
             monthFlyingStars = getMonthFlyingStars(now.getFullYear(), now.getMonth() + 1);
 
-            renderNinePalace();
+            // Apply saved language preference on load
+            applyLanguage();
+
             setupEventListeners();
             checkCompassPermission();
             getLocation();
@@ -915,19 +1341,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="direction-text" id="directionText">北 0°</div>
+                            <div class="direction-text" id="directionText">${isEn ? 'N' : '北'} 0°</div>
                             <div class="compass-status" id="compassStatus">
                                 <span class="status-dot"></span>
-                                <span id="statusText">等待启动</span>
+                                <span id="statusText">${t('compassWait')}</span>
                             </div>
                         </div>
                     `;
                 } else {
+                    const pName = isEn ? tPalaceName(palace.id) : palace.name;
+                    const pDir = isEn ? tDirection(palace.direction) : palace.direction;
+                    const sName = isEn ? tStarName(star) : starInfo.name;
+                    const sLuck = isEn ? tLuck(starInfo.luck) : starInfo.luck;
                     div.innerHTML = `
-                        <div class="palace-name">${palace.name}</div>
-                        <div class="palace-direction">${palace.direction}</div>
-                        <div class="palace-star ${starInfo.class}">${starInfo.name}</div>
-                        <div class="palace-star-name">${starInfo.luck}</div>
+                        <div class="palace-name">${pName}</div>
+                        <div class="palace-direction">${pDir}</div>
+                        <div class="palace-star ${starInfo.class}">${sName}</div>
+                        <div class="palace-star-name">${sLuck}</div>
                         ${palace.tiangan ? `<div class="palace-meta">${palace.tiangan}</div>` : ''}
                     `;
                 }
@@ -948,17 +1378,17 @@
                 typeof DeviceOrientationEvent.requestPermission === 'function') {
                 // iOS设备，显示权限按钮
                 permissionBtn.classList.add('show');
-                permissionBtn.textContent = '开启指南针';
-                updateCompassStatus('需授权', false);
+                permissionBtn.textContent = t('enableCompass');
+                updateCompassStatus(t('compassNeedAuth'), false);
             } else if ('DeviceOrientationEvent' in window) {
                 // 非iOS或旧版iOS，直接尝试启动
                 // 但先显示按钮让用户确认（某些浏览器需要用户手势触发）
                 permissionBtn.classList.add('show');
-                permissionBtn.textContent = '开启指南针';
-                updateCompassStatus('点击启动', false);
+                permissionBtn.textContent = t('enableCompass');
+                updateCompassStatus(t('compassTapStart'), false);
             } else {
                 // 完全不支持
-                updateCompassStatus('设备不支持', false);
+                updateCompassStatus(t('compassUnsupported'), false);
                 permissionBtn.style.display = 'none';
             }
         }
@@ -983,14 +1413,14 @@
                             permissionBtn.classList.remove('show');
                             startCompass();
                         } else {
-                            updateCompassStatus('权限被拒绝', false);
-                            permissionBtn.textContent = '权限被拒，点击重试';
+                            updateCompassStatus(t('compassDenied'), false);
+                            permissionBtn.textContent = t('compassRetry');
                         }
                     })
                     .catch(error => {
                         console.error('指南针权限请求失败:', error);
-                        updateCompassStatus('请求失败', false);
-                        permissionBtn.textContent = '点击重试';
+                        updateCompassStatus(t('compassFailed'), false);
+                        permissionBtn.textContent = t('compassRetryTap');
                     });
             } else {
                 // 非iOS设备，直接启动
@@ -1001,7 +1431,7 @@
         }
 
         function startCompass() {
-            updateCompassStatus('启动中...', false);
+            updateCompassStatus(t('compassStarting'), false);
             
             // 添加事件监听
             window.addEventListener('deviceorientation', handleOrientation);
@@ -1015,7 +1445,7 @@
             setTimeout(() => {
                 if (currentAlpha === 0) {
                     // 没有收到方向数据
-                    updateCompassStatus('无方向数据', false);
+                    updateCompassStatus(t('compassNoData'), false);
                     showCompassError();
                 }
             }, 2000);
@@ -1035,14 +1465,14 @@
                 currentAlpha = event.alpha;
                 updateCompassDisplay(event.alpha);
                 highlightPalace(event.alpha);
-                updateCompassStatus('正常', true);
+                updateCompassStatus(t('compassNormal'), true);
             }
         }
         
         function showCompassError() {
             const status = document.getElementById('compassStatus');
-            status.innerHTML = `<span style="color:var(--luck-bad);">⚠️ 指南针不可用</span>
-                <div style="font-size:10px;margin-top:4px;">请在手机浏览器中打开</div>`;
+            status.innerHTML = `<span style="color:var(--luck-bad);">${t('compassUnavailable')}</span>
+                <div style="font-size:10px;margin-top:4px;">${t('compassOpenMobile')}</div>`;
         }
 
         function handleOrientation(event) {
@@ -1065,7 +1495,7 @@
             currentAlpha = alpha;
             updateCompassDisplay(alpha);
             highlightPalace(alpha);
-            updateCompassStatus('正常', true);
+            updateCompassStatus(t('compassNormal'), true);
         }
 
         function updateCompassDisplay(alpha) {
@@ -1077,8 +1507,9 @@
             const direction = getDirectionFromAlpha(alpha);
             const directionText = document.getElementById('directionText');
             if (directionText) {
-                // 显示"方位 度数"格式，如"北 0°"、"东北 45°"
-                directionText.textContent = `${direction.direction} ${Math.round(alpha)}°`;
+                // 显示"方位 度数"格式
+                const dirName = isEn ? tDirection(direction.direction) : direction.direction;
+                directionText.textContent = `${dirName} ${Math.round(alpha)}°`;
             }
         }
 
@@ -1137,11 +1568,11 @@
             const locationText = document.getElementById('locationText');
             
             if (!navigator.geolocation) {
-                locationText.textContent = '浏览器不支持定位';
+                locationText.textContent = t('geoUnsupported');
                 return;
             }
             
-            locationText.textContent = '定位中...';
+            locationText.textContent = t('locating');
             
             navigator.geolocation.getCurrentPosition(
                 position => {
@@ -1150,19 +1581,19 @@
                     locationText.innerHTML = `${lat}°N, ${lng}°E <span style="font-size:10px;color:var(--gold);">✓</span>`;
                 },
                 error => {
-                    let msg = '定位失败';
+                    let msg = t('geoFailed');
                     switch(error.code) {
                         case error.PERMISSION_DENIED:
-                            msg = '定位权限被拒绝';
+                            msg = t('geoDenied');
                             break;
                         case error.POSITION_UNAVAILABLE:
-                            msg = '位置信息不可用';
+                            msg = t('geoUnavailable');
                             break;
                         case error.TIMEOUT:
-                            msg = '定位超时';
+                            msg = t('geoTimeout');
                             break;
                     }
-                    locationText.innerHTML = `${msg} <span style="font-size:10px;text-decoration:underline;" onclick="requestLocationAgain()">重试</span>`;
+                    locationText.innerHTML = `${msg} <span style="font-size:10px;text-decoration:underline;" onclick="requestLocationAgain()">${t('geoRetry')}</span>`;
                     console.log('定位错误:', error.message);
                 },
                 { 
@@ -1183,31 +1614,31 @@
             const yearStar = STAR_DATA[yearFlyingStars[index]];
             const monthStar = STAR_DATA[monthFlyingStars[index]];
 
-            document.getElementById('modalPalaceName').textContent = palace.name;
-            document.getElementById('modalDirection').textContent = palace.direction;
+            document.getElementById('modalPalaceName').textContent = isEn ? tPalaceName(palace.id) : palace.name;
+            document.getElementById('modalDirection').textContent = isEn ? tDirection(palace.direction) : palace.direction;
             document.getElementById('modalTiangan').textContent = palace.tiangan || '-';
-            document.getElementById('modalWuxing').textContent = palace.wuxing;
-            document.getElementById('modalPerson').textContent = palace.person || '-';
-            document.getElementById('modalBody').textContent = palace.body || '-';
+            document.getElementById('modalWuxing').textContent = isEn ? tWuxing(palace.wuxing) : palace.wuxing;
+            document.getElementById('modalPerson').textContent = isEn ? tPerson(palace.person) : (palace.person || '-');
+            document.getElementById('modalBody').textContent = isEn ? tBody(palace.body) : (palace.body || '-');
 
             // 年星
             const yearStarNum = document.getElementById('modalYearStarNum');
-            yearStarNum.textContent = yearStar.name;
+            yearStarNum.textContent = isEn ? tStarName(yearFlyingStars[index]) : yearStar.name;
             yearStarNum.className = `modal-star-number ${yearStar.class}`;
             const yearStarLuck = document.getElementById('modalYearStarLuck');
-            yearStarLuck.textContent = yearStar.luck;
+            yearStarLuck.textContent = isEn ? tLuck(yearStar.luck) : yearStar.luck;
             yearStarLuck.className = `modal-star-luck ${yearStar.class.replace('star-', '')}`;
-            document.getElementById('modalYearStarDesc').textContent = yearStar.desc;
+            document.getElementById('modalYearStarDesc').textContent = isEn ? tStarDesc(yearFlyingStars[index]) : yearStar.desc;
 
             // 月星
             document.getElementById('modalMonthStar').style.display = 'block';
             const monthStarNum = document.getElementById('modalMonthStarNum');
-            monthStarNum.textContent = monthStar.name;
+            monthStarNum.textContent = isEn ? tStarName(monthFlyingStars[index]) : monthStar.name;
             monthStarNum.className = `modal-star-number ${monthStar.class}`;
             const monthStarLuck = document.getElementById('modalMonthStarLuck');
-            monthStarLuck.textContent = monthStar.luck;
+            monthStarLuck.textContent = isEn ? tLuck(monthStar.luck) : monthStar.luck;
             monthStarLuck.className = `modal-star-luck ${monthStar.class.replace('star-', '')}`;
-            document.getElementById('modalMonthStarDesc').textContent = monthStar.desc;
+            document.getElementById('modalMonthStarDesc').textContent = isEn ? tStarDesc(monthFlyingStars[index]) : monthStar.desc;
 
             document.getElementById('modalOverlay').classList.add('show');
         }
@@ -1258,25 +1689,25 @@
 
     <!-- 开源信息 | Open Source Info -->
     <div style="text-align:center;padding:20px 15px;margin-top:10px;border-top:1px solid rgba(0,128,128,0.2);">
-        <div style="font-size:14px;color:#008080;font-weight:bold;margin-bottom:8px;letter-spacing:1px;">⚡ 开源版 | Open Source Edition</div>
-        <div style="font-size:12px;color:#999;line-height:1.8;margin-bottom:8px;">
+        <div style="font-size:14px;color:#008080;font-weight:bold;margin-bottom:8px;letter-spacing:1px;" data-i18n="openSourceEdition">⚡ 开源版 | Open Source Edition</div>
+        <div style="font-size:12px;color:#999;line-height:1.8;margin-bottom:8px;" data-i18n="openSourceDesc">
             本产品以 BSL 1.1 许可证开源发布，非商业用途免费使用<br>
             Released under BSL 1.1 License, free for non-commercial use
         </div>
         <div style="margin-bottom:8px;">
-            <a href="https://zetian.i-ching-ai.com" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#008080,#00a8a8);color:#fff;border:none;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:bold;text-decoration:none;letter-spacing:1px;">✨ 完整版 → 官网</a>
+            <a href="https://zetian.i-ching-ai.com" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#008080,#00a8a8);color:#fff;border:none;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:bold;text-decoration:none;letter-spacing:1px;" data-i18n="fullVersionLink">✨ 完整版 → 官网</a>
             <a href="https://github.com/zettian/fengshui" target="_blank" style="display:inline-block;border:1px solid rgba(0,128,128,0.5);color:#008080;padding:8px 20px;border-radius:20px;font-size:13px;text-decoration:none;margin-left:8px;">⭐ GitHub</a>
             <a href="https://github.com/zettian/fengshui/blob/main/LICENSE" target="_blank" style="display:inline-block;border:1px solid rgba(0,128,128,0.5);color:#008080;padding:8px 20px;border-radius:20px;font-size:13px;text-decoration:none;margin-left:8px;">📄 BSL 1.1</a>
         </div>
-        <div style="font-size:12px;color:#008080;margin-bottom:4px;">📱 微信小程序搜「易学轻松玩」</div>
-        <div style="font-size:11px;color:#666;margin-top:4px;">开源引擎由择天老师开发 | Engine by Master Zeyue</div>
+        <div style="font-size:12px;color:#008080;margin-bottom:4px;" data-i18n="wechatMiniProgram">📱 微信小程序搜「易学轻松玩」</div>
+        <div style="font-size:11px;color:#666;margin-top:4px;" data-i18n="engineByMaster">开源引擎由择天老师开发 | Engine by Master Zeyue</div>
     </div>
 
 <!-- 文化声明 | Cultural Disclaimer -->
 <div class="cultural-disclaimer">
-    <div class="disclaimer-title">📜 文化声明 | Cultural Disclaimer</div>
-    <div class="disclaimer-zh">本产品基于中华传统易学文化体系，以图解与解读的形式呈现古代智慧，仅供文化学习与个人参考之用，不构成任何预测、决策或专业建议。用户应理性看待，自行判断。</div>
-    <div class="disclaimer-en">This product is based on traditional Chinese I Ching cultural systems, presenting ancient wisdom through visual interpretation and cultural analysis. For educational and cultural purposes only. It does not constitute any prediction, professional advice, or decision-making guidance.</div>
+    <div class="disclaimer-title" data-i18n="culturalDisclaimerTitle">📜 文化声明 | Cultural Disclaimer</div>
+    <div class="disclaimer-zh" data-i18n="culturalDisclaimerZh">本产品基于中华传统易学文化体系，以图解与解读的形式呈现古代智慧，仅供文化学习与个人参考之用，不构成任何预测、决策或专业建议。用户应理性看待，自行判断。</div>
+    <div class="disclaimer-en" data-i18n="culturalDisclaimerEn">This product is based on traditional Chinese I Ching cultural systems, presenting ancient wisdom through visual interpretation and cultural analysis. For educational and cultural purposes only. It does not constitute any prediction, professional advice, or decision-making guidance.</div>
 </div>
 
 </body>
